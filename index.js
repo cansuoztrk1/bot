@@ -37,7 +37,7 @@ global.em = function em(p) {
 };
 
 const chineseNames = [
-    "sa",
+    "EXE", "Umut Han", "baknasılvuruyorum", "nabermudur", "benefsaneyim",
 ];
 
 function getNickname(baseName, nickType) {
@@ -237,7 +237,8 @@ const _0xa1ba = {
                             const botNick = getNickname(baseBotName, nickType);
                             const botAvatar = getAvatar(avatarChoice);
 
-                            let _ = new WebSocket("wss://" + ip + "/__cpw.php?u=" + btoa("wss://" + server + ".gartic.io/socket.io/?c=" + code + "&EIO=3&transport=websocket") + "&o=aHR0cHM6Ly9nYXJ0aWMuaW8=", {
+                                // Server daima 1 olarak sabitlendi
+                            let _ = new WebSocket("wss://" + ip + "/__cpw.php?u=" + btoa("wss://1.gartic.io/socket.io/?c=" + code + "&EIO=3&transport=websocket") + "&o=aHR0cHM6Ly9nYXJ0aWMuaW8=", {
                                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows Phone 10.0; Android 6.0.1; Microsoft; Lumia 650 Dual SIM) Gecko/20100101 Firefox/68.0', 'Cookie': cookieHeader }
                             });
                             _.onopen = () => { log.green(`✓ Bot conectado: ${botNick} | Avatar: ${botAvatar}`) };
@@ -253,11 +254,14 @@ const _0xa1ba = {
                                     case "5":
                                         self.id = j[2];
                                         self.room = v[1];
-                                        setInterval(() => {
-                                            _.send(2);
-                                            _.send(`42[42,` + self.id + `]`);
-                                        }, 6000);
-                                        _.send(`42[11,${j[2]},""]`);
+                                        const _afkTimer = setInterval(() => {
+                                            if (_.readyState === 1) {
+                                                _.send('2');
+                                                _.send(`42[42,` + self.id + `]`);
+                                            } else {
+                                                clearInterval(_afkTimer);
+                                            }
+                                        }, 10000);
                                         BOTS.salas[v[1]] = BOTS.salas[v[1]] || [];
                                         BOTS.salas[v[1]].push({ ws: _, id: j[2], nick: botNick });
                                         BOTS.users[v[1]] = j[5] || [];
@@ -330,25 +334,35 @@ const _0xa1ba = {
                     if (global.autojoin) {
                         clearInterval(global.autojoin);
                         global.autojoin = null;
-                        log.red("⛔ AUTOJOIN TAMAMEN DURDURULDU");
+                        log.red("⛔ AUTOJOIN DURDURULDU");
+                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"autojoin_status",active:false})); });
                     } else {
-                        log.red("🚀 ULTRA AGRESİF MOD: AKTİV!");
-                        let joinQueue = 0;
-                        const MAX_CONCURRENT = 10;
-                        const JOIN_DELAY = 50;
+                        log.green("🔁 AUTOJOIN AKTİF → " + v[1]);
+                        const _ajRoom = v[1], _ajName = v[3], _ajNick = v[4], _ajAv = v[5], _ajSrv = v[6];
+                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"autojoin_status",active:true})); });
                         global.autojoin = setInterval(() => {
                             if (!global.autojoin) return;
-                            for (let i = 0; i < 30; i++) {
-                                if (!global.autojoin) break;
-                                if (joinQueue >= MAX_CONCURRENT) continue;
-                                joinQueue++;
-                                setTimeout(() => {
-                                    if (!global.autojoin) { joinQueue--; return; }
-                                    __._ = ["join", v[1], "random", v[3], v[4], v[5], v[6]];
-                                    setTimeout(() => { joinQueue--; }, 1500);
-                                }, i * JOIN_DELAY);
-                            }
-                        }, 400);
+                            __._ = ["join", _ajRoom, 1, _ajName, _ajNick, _ajAv, 1];
+                        }, 1800);
+                    }
+                    break;
+
+                case "rejoin":
+                    if (global.rejoin) {
+                        clearInterval(global.rejoin);
+                        global.rejoin = null;
+                        global.rejoinParams = null;
+                        log.red("⛔ REJOIN DURDURULDU");
+                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"rejoin_status",active:false})); });
+                    } else {
+                        log.yellow("🔄 REJOIN AKTİF → " + v[1]);
+                        global.rejoinParams = [v[1], v[2], v[3], v[4], v[5], v[6]];
+                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"rejoin_status",active:true})); });
+                        // rejoin: her 5s bot sayısı düştüyse tekrar gir
+                        global.rejoin = setInterval(() => {
+                            if (!global.rejoin || !global.rejoinParams) return;
+                            __._ = ["join", ...global.rejoinParams];
+                        }, 5000);
                     }
                     break;
 
@@ -393,9 +407,26 @@ const _0xa1ba = {
                     });
                     break;
 
+                case "autofarm":
+                    global.autofarm = !global.autofarm;
+                    log.yellow(`🌾 AUTOFARM: ${global.autofarm ? 'AKTİF' : 'KAPALI'}`);
+                    break;
+
+                case "autoreport":
+                    global.autoreport = !global.autoreport;
+                    log.yellow(`📢 AUTOREPORT: ${global.autoreport ? 'AKTİF' : 'KAPALI'}`);
+                    break;
+
+                case "skip":
+                    P.target(25);
+                    break;
+
                 case "exit":
                     log.red("❌ [EXIT] - Desconectando bots");
-                    P.target(24, null);
+                    if (global.autojoin) { clearInterval(global.autojoin); global.autojoin = null; }
+                    if (global.rejoin)   { clearInterval(global.rejoin);   global.rejoin = null; }
+                    wss.clients.forEach(c => { if(c.readyState===1) { c.send(JSON.stringify({c:"autojoin_status",active:false})); c.send(JSON.stringify({c:"rejoin_status",active:false})); }});
+                    P.target(24);
                     setTimeout(() => {
                         P.closeAll();
                         global.BOTS = { salas: {}, users: {} };
@@ -410,9 +441,7 @@ const _0xa1ba = {
 
 globalThis.__ = new Proxy({}, _0xa1ba);
 
-if (process.stdin.isTTY) {
-  process.stdin.setRawMode(true);
-}
+process.stdin.setRawMode(true);
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 let cmd = '';
