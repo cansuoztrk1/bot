@@ -410,7 +410,9 @@ const _0xa1ba = {
 
 globalThis.__ = new Proxy({}, _0xa1ba);
 
-process.stdin.setRawMode(true);
+if (process.stdin.isTTY) {
+  process.stdin.setRawMode(true);
+}
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 let cmd = '';
