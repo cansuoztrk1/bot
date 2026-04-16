@@ -37,7 +37,7 @@ global.em = function em(p) {
 };
 
 const chineseNames = [
-    "EXE", "Umut Han", "baknasılvuruyorum", "nabermudur", "benefsaneyim",
+    "sa",
 ];
 
 function getNickname(baseName, nickType) {
