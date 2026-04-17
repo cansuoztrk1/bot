@@ -66,25 +66,38 @@ function getAvatar(avatarChoice) {
 }
 
 const ips = [
-    '185.246.84.66', '185.246.86.208', '108.181.54.41', '185.246.86.211',
-    '108.181.90.163', '108.181.90.129', '199.71.214.121', '108.181.88.29',
-    '199.71.214.89', '208.87.240.59', '108.181.6.9', '108.181.5.51',
-    '108.181.3.225', '208.87.242.51', '108.181.21.229', '108.181.33.119',
-    '108.181.33.135', '208.87.241.1', '108.181.34.71', '108.181.34.151',
-    '108.181.32.73', '108.181.32.49', '108.181.34.45', '108.181.43.67',
-    '108.181.32.63', '108.181.32.57', '108.181.32.59', '108.181.24.243',
-    '108.181.34.177', '108.181.34.157', '208.87.241.169', '95.214.53.33',
-    '146.19.24.89', '195.3.222.15', '195.3.223.166', '195.3.223.164',
-    '185.16.39.166', '108.181.6.89', '108.181.9.39', '108.181.11.39',
-    '108.181.8.179', '208.87.240.203', '108.181.2.202', '208.87.240.251',
-    '108.181.3.54', '208.87.241.149', '108.181.4.237', '208.87.241.209',
-    '108.181.4.241', '108.181.5.31', '208.87.240.35', '108.181.5.242',
-    '208.87.242.233', '208.87.240.67', '95.214.53.48', '195.3.222.40',
-    '108.181.11.173', '108.181.12.46', '108.181.11.193', '108.181.11.171',
-    '108.181.11.175', '185.16.39.144', '178.211.139.238', '185.16.39.213',
-    '185.246.84.18', '185.246.87.7', '138.128.242.241', '103.45.245.190',
-    '104.129.128.157', '113.30.190.82', '185.237.98.122', '95.214.55.66',
-    '185.241.7.16'
+    '185.246.84.66','185.246.86.208','108.181.54.41','185.246.86.211',
+'108.181.90.163','108.181.90.129','199.71.214.121','108.181.88.29',
+'199.71.214.89','208.87.240.59','108.181.6.9','108.181.5.51',
+'108.181.3.225','208.87.242.51','108.181.21.229','108.181.33.119',
+'108.181.33.135','208.87.241.1','108.181.34.71','108.181.34.151',
+'108.181.32.73','108.181.32.49','108.181.34.45','108.181.43.67',
+'108.181.32.63','108.181.32.57','108.181.32.59','108.181.24.243',
+'108.181.34.177','108.181.34.157','208.87.241.169','95.214.53.33',
+'146.19.24.89','195.3.222.15','195.3.223.166','195.3.223.164',
+'185.16.39.166','108.181.6.89','108.181.9.39','108.181.11.39',
+'108.181.8.179','208.87.240.203','108.181.2.202','208.87.240.251',
+'108.181.3.54','208.87.241.149','108.181.4.237','208.87.241.209',
+'108.181.4.241','108.181.5.31','208.87.240.35','108.181.5.242',
+'208.87.242.233','208.87.240.67','95.214.53.48','195.3.222.40',
+'108.181.11.173','108.181.12.46','108.181.11.193','108.181.11.171',
+'108.181.11.175','185.16.39.144','178.211.139.238','185.16.39.213',
+'185.246.84.18','185.246.87.7','138.128.242.241','103.45.245.190',
+'104.129.128.157','113.30.190.82','185.237.98.122','95.214.55.66',
+'185.241.7.16','185.220.101.20','185.220.101.104','185.220.101.29',
+'185.220.100.240','212.95.50.223','185.220.101.24','109.70.100.11',
+'192.42.116.98','185.150.28.13','51.158.204.58','192.42.116.93',
+'109.70.100.7','185.170.114.25','107.189.8.181','109.70.100.3',
+'51.159.111.23','51.159.194.250','51.159.194.223','45.138.16.231',
+'104.21.12.60','195.3.223.101','185.16.38.113','195.3.220.74',
+'109.70.100.12','95.214.53.156','185.16.38.230','185.16.38.114',
+'195.3.220.223','146.19.24.59','104.21.27.141','185.16.38.103',
+'185.16.38.122','95.214.53.28','185.16.39.161','104.21.5.205',
+'104.21.72.101','104.21.55.14','188.68.49.235','104.21.11.67',
+'67.220.228.202','193.189.100.198','104.21.9.41','104.21.11.58',
+'104.21.84.24','104.21.7.113','104.21.26.103','193.189.100.205',
+'195.47.238.178','185.220.101.150','88.80.145.4','88.80.145.74',
+'199.195.251.119','108.181.34.149','108.181.5.29','208.87.240.59'
 ];
 
 async function _813() { const res = await fetch('https://www.croxyproxy.rocks/'); const html = await res.text(); const dom = new JSDOM(html); return dom.window.document.querySelector('#request > input[type=hidden]').value }
@@ -237,8 +250,7 @@ const _0xa1ba = {
                             const botNick = getNickname(baseBotName, nickType);
                             const botAvatar = getAvatar(avatarChoice);
 
-                                // Server daima 1 olarak sabitlendi
-                            let _ = new WebSocket("wss://" + ip + "/__cpw.php?u=" + btoa("wss://1.gartic.io/socket.io/?c=" + code + "&EIO=3&transport=websocket") + "&o=aHR0cHM6Ly9nYXJ0aWMuaW8=", {
+                            let _ = new WebSocket("wss://" + ip + "/__cpw.php?u=" + btoa("wss://" + server + ".gartic.io/socket.io/?c=" + code + "&EIO=3&transport=websocket") + "&o=aHR0cHM6Ly9nYXJ0aWMuaW8=", {
                                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows Phone 10.0; Android 6.0.1; Microsoft; Lumia 650 Dual SIM) Gecko/20100101 Firefox/68.0', 'Cookie': cookieHeader }
                             });
                             _.onopen = () => { log.green(`✓ Bot conectado: ${botNick} | Avatar: ${botAvatar}`) };
@@ -254,14 +266,11 @@ const _0xa1ba = {
                                     case "5":
                                         self.id = j[2];
                                         self.room = v[1];
-                                        const _afkTimer = setInterval(() => {
-                                            if (_.readyState === 1) {
-                                                _.send('2');
-                                                _.send(`42[42,` + self.id + `]`);
-                                            } else {
-                                                clearInterval(_afkTimer);
-                                            }
-                                        }, 10000);
+                                        setInterval(() => {
+                                            _.send(2);
+                                            _.send(`42[42,` + self.id + `]`);
+                                        }, 6000);
+                                        _.send(`42[11,${j[2]},""]`);
                                         BOTS.salas[v[1]] = BOTS.salas[v[1]] || [];
                                         BOTS.salas[v[1]].push({ ws: _, id: j[2], nick: botNick });
                                         BOTS.users[v[1]] = j[5] || [];
@@ -334,35 +343,25 @@ const _0xa1ba = {
                     if (global.autojoin) {
                         clearInterval(global.autojoin);
                         global.autojoin = null;
-                        log.red("⛔ AUTOJOIN DURDURULDU");
-                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"autojoin_status",active:false})); });
+                        log.red("⛔ AUTOJOIN TAMAMEN DURDURULDU");
                     } else {
-                        log.green("🔁 AUTOJOIN AKTİF → " + v[1]);
-                        const _ajRoom = v[1], _ajName = v[3], _ajNick = v[4], _ajAv = v[5], _ajSrv = v[6];
-                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"autojoin_status",active:true})); });
+                        log.red("🚀 ULTRA AGRESİF MOD: AKTİV!");
+                        let joinQueue = 0;
+                        const MAX_CONCURRENT = 10;
+                        const JOIN_DELAY = 50;
                         global.autojoin = setInterval(() => {
                             if (!global.autojoin) return;
-                            __._ = ["join", _ajRoom, 1, _ajName, _ajNick, _ajAv, 1];
-                        }, 1800);
-                    }
-                    break;
-
-                case "rejoin":
-                    if (global.rejoin) {
-                        clearInterval(global.rejoin);
-                        global.rejoin = null;
-                        global.rejoinParams = null;
-                        log.red("⛔ REJOIN DURDURULDU");
-                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"rejoin_status",active:false})); });
-                    } else {
-                        log.yellow("🔄 REJOIN AKTİF → " + v[1]);
-                        global.rejoinParams = [v[1], v[2], v[3], v[4], v[5], v[6]];
-                        wss.clients.forEach(c => { if(c.readyState===1) c.send(JSON.stringify({c:"rejoin_status",active:true})); });
-                        // rejoin: her 5s bot sayısı düştüyse tekrar gir
-                        global.rejoin = setInterval(() => {
-                            if (!global.rejoin || !global.rejoinParams) return;
-                            __._ = ["join", ...global.rejoinParams];
-                        }, 5000);
+                            for (let i = 0; i < 30; i++) {
+                                if (!global.autojoin) break;
+                                if (joinQueue >= MAX_CONCURRENT) continue;
+                                joinQueue++;
+                                setTimeout(() => {
+                                    if (!global.autojoin) { joinQueue--; return; }
+                                    __._ = ["join", v[1], "random", v[3], v[4], v[5], v[6]];
+                                    setTimeout(() => { joinQueue--; }, 1500);
+                                }, i * JOIN_DELAY);
+                            }
+                        }, 400);
                     }
                     break;
 
@@ -407,26 +406,9 @@ const _0xa1ba = {
                     });
                     break;
 
-                case "autofarm":
-                    global.autofarm = !global.autofarm;
-                    log.yellow(`🌾 AUTOFARM: ${global.autofarm ? 'AKTİF' : 'KAPALI'}`);
-                    break;
-
-                case "autoreport":
-                    global.autoreport = !global.autoreport;
-                    log.yellow(`📢 AUTOREPORT: ${global.autoreport ? 'AKTİF' : 'KAPALI'}`);
-                    break;
-
-                case "skip":
-                    P.target(25);
-                    break;
-
                 case "exit":
                     log.red("❌ [EXIT] - Desconectando bots");
-                    if (global.autojoin) { clearInterval(global.autojoin); global.autojoin = null; }
-                    if (global.rejoin)   { clearInterval(global.rejoin);   global.rejoin = null; }
-                    wss.clients.forEach(c => { if(c.readyState===1) { c.send(JSON.stringify({c:"autojoin_status",active:false})); c.send(JSON.stringify({c:"rejoin_status",active:false})); }});
-                    P.target(24);
+                    P.target(24, null);
                     setTimeout(() => {
                         P.closeAll();
                         global.BOTS = { salas: {}, users: {} };
@@ -441,9 +423,7 @@ const _0xa1ba = {
 
 globalThis.__ = new Proxy({}, _0xa1ba);
 
-if (process.stdin.isTTY) {
-    process.stdin.setRawMode(true);
-}
+process.stdin.setRawMode(true);
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 let cmd = '';
